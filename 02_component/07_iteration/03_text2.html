@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const {useState} = React;
+
+        function App () {
+
+            const [menu, setMenu] = useState([
+                {id : 1, name : "정어리빙수", price : 15000}
+            ])
+
+            const [nextId, setNextId] = useState(2);
+
+            const [nameText, setNameText] = useState('');
+            const [priceText, setPriceText] = useState('');
+
+            const nameOnChange = (e) => setNameText(e.target.value);
+            const priceOnChange = (e) => setPriceText(e.target.value);
+
+            const menuButton = () => {
+
+                const addMenu = menu.concat([
+                    {id : nextId, name : nameText, price : priceText}
+                ])
+
+                setMenu(addMenu);
+                setNextId(nextId + 1);
+                setNameText('');
+                setPriceText('');
+            }
+
+            const menuList = menu.map(menus => <tr key={menus.id}>
+                                                <td>{menus.name}</td>
+                                                <td>{menus.price}</td>
+                                            </tr>)
+
+            return(
+                <>
+                <h1>메뉴 조회</h1>
+                <table>
+                    <tr>
+                        <th>이름</th>
+                        <th>가격</th>
+                    </tr>
+                    {menuList}
+                </table>
+                <h1>메뉴추가</h1>
+                <label>메뉴 이름 : </label>
+                <input type="text" value={nameText} onChange={nameOnChange}/>
+                <label>메뉴 가격 : </label>
+                <input type="number" value={priceText} onChange={priceOnChange}/>
+                <button onClick={menuButton}>메뉴추가하기</button>
+                </>
+            )
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>)
+    </script>
+</body>
+</html>

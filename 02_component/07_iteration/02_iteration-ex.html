@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        // 상태값 관리를 위한 useState 사용준비
+        const {useState} = React;
+
+        function App() {
+
+              // 회원 목록 상태 관리
+        const[users, setUsers] = useState([
+            // 객체로 넣기 id : key 1 : value
+            {id: 1, name: '나루토'},
+            {id: 2, name: '사스케'},
+            {id: 3, name: '사쿠라'}
+        ]);
+
+        // Input 텍스트 상태
+        const [text, setText] = useState('');
+
+        // Id 증가 상태(key의 중복을 막고 자동증가 시키기 위해 지금 상황에서 쓴다)
+        const [nextId, setNextId] = useState(4);
+
+        const onChangeHandler = (e) => setText(e.target.value);
+
+        const onClickHandler = () => {
+             // concat : 기존 배열을 바꾸지 않고 합친 결과 반환
+             const changeUsers = users.concat({
+                id : nextId,
+                name : text // 우리가 input 창에 입력한 값
+             });
+
+             setNextId(nextId + 1);  // key 값 중복을 막기 위해 더해줌
+             setUsers(changeUsers); // 위에만든 changeUsers 로 바꿔줌
+             setText('');
+        }
+
+        const onRemove = (id) => {
+            /* 
+            배열의 filter란?
+                배열명.filter(callback)
+                기존 배열에서 callback 함수를 각 요소마다 실행하고 true 를 반환하는 요소들로 배열을 다시 정의한다.
+             */
+
+             const filterUsers = users.filter(user => user.id !== id); // 우리가 매개변수에 전달받은 user.id 와 같지 않다면? 
+                                                                       // 우리가 만약 2번은 더블클릭하면 2번빼고 1,3 번을 새로 배열을 만든다는 느낌이다.
+            setUsers(filterUsers); // 더블클릭을 제외한 li 를 만들어서 set으로 수정
+        }
+
+        // userList 화면에 뿌려주기
+        const userList = users.map(user => <li key={user.id} onDoubleClick={() => onRemove(user.id)}>{user.name}</li>);
+        return (
+            <>
+            <h1>멤버추가</h1>
+            <input type="text" 
+                   value={text}
+                   onChange={onChangeHandler} />
+            <button onClick={onClickHandler}>추가</button>
+            <ul>
+                {userList}    
+            </ul>
+            </>
+        )
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+</body>
+</html>

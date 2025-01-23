@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+    <style>
+        
+        .h1 {
+            background-color : black; 
+            color : white;
+            text-align: center;
+            height: 100px;
+        }
+
+        .header {
+            background-color: white;
+            width: 700px;
+            height: 700px;
+            margin-left: 600px;
+            border-radius: 20px;
+            
+        }
+    
+        .text {
+            padding: 30px;
+            margin: 20px;
+        }
+
+        .button {
+            background-color: green;
+            color: white;
+            border-radius: 5px;
+            width: 70px;
+            height: 40px;
+        }
+
+        .main {
+            margin-top: 20px;
+            margin-left: 800px;
+        }
+
+        .footer {
+            background-color : black; 
+            color : white;
+            text-align: center;
+            height: 100px;
+        }
+
+        .center {
+            background-color:lightblue;
+        }
+
+        .xButton {
+            background-color: red;
+            border-radius: 100px;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const {useState} = React;
+
+        function App () {
+
+            const [text, setText] = useState('');
+
+            const [nextList, setNextList] = useState(2);
+
+            const [list, setList] = useState([
+                {id : 1, name : '할일 목록 추가하기'}
+                ])
+
+            const textOnChange = (e) => setText(e.target.value)
+
+            const textOnClick = () => {
+                
+                const changeList = list.concat ({
+                    id : nextList,
+                    name : text
+                })
+                console.log(changeList)
+                setList(changeList);
+                setNextList(nextList + 1);
+                setText('');
+            }
+
+            const onRemove = (id) => {
+                const filteredList = list.filter((item) => item.id !== id);
+                setList(filteredList);
+            };
+            
+            const textList = list.map(lists => <><li key={lists.id}>{lists.name}<button className="xButton" onClick={() => onRemove(lists.id)}>X</button></li></>)
+            
+
+            return (
+                <>
+                <div className="center">
+                <h1 className="h1">오늘의할일! 2025.01.22.</h1>
+                <div className="header">
+                    <ul className="text">
+                    {textList}
+                    </ul>
+                </div>
+                <div className="main">
+                    <input type="text" value={text} onChange={textOnChange}/>
+                    <button onClick={textOnClick} className="button">추가하기</button>
+                </div>
+                <p className="footer">Copyright 2022.team-greedy all rights reserved.</p>
+                </div>
+                </>
+            )
+        }
+
+
+
+
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>)
+    </script>
+</body>
+</html>
