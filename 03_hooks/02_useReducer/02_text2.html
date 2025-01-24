@@ -12,41 +12,53 @@
 <body>
     <div id="root"></div>
 
-
     <script type="text/babel">
 
         const {useState, useEffect} = React;
 
-        function Counter() {
+        function Timer() {
 
-            const[number, setNumber] = useState(0);
+            useEffect(() => {
 
-            const changeNumber = () => {
-                setNumber(number + 1);
+                const timer = setInterval(() => {
+                    console.log(new Date().toLocaleTimeString())
+                }, 2000);
+
+                return () => {
+                    clearInterval(timer);
+                }
+
+        }, [])
+
+
+        }
+
+        function App() {
+
+            const[time, setTime] = useState(false);
+
+            const onClickHandler = () => {
+                setTime(!time)
             }
 
-        useEffect(() => {
-            console.log('effect 동작함 !!!')
 
-            // useEffect 내에서 리턴되는 함수는 정리 함수라고 한다.
-            return () => {
-                console.log('청소함수 동작함!!!')
-            }
-        })
-
-            return(
+            return (
                 <>
-                    <h1>Number : {number}</h1>
-                    <button onClick={changeNumber}>+1</button>
+                <button onClick={onClickHandler}>타이머</button>
+                {time && <Timer/>}
                 </>
             )
         }
 
+        
 
 
 
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<Counter/>);
+
+
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>)
     </script>
 </body>
 </html>

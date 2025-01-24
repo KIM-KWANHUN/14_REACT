@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const {useState, useEffect} = React;
+
+        function Timer () {
+
+            useEffect(() => {
+                console.log('타이머 시작됨....')
+                const timer = setInterval(() => {
+                    console.log(new Date().toLocaleTimeString())
+                }, 1000);
+
+                //정리함수는 useEffect 를 리턴함으로써 실행할 수 있다.
+                return () => {
+                    clearInterval(timer); // 타이머를 정리해줘
+                    console.log('타이머가 종료됨....');
+                }
+            },[]);
+
+        }
+
+        function App() {
+            // 상황이 두가지라면 boolean 타입이 좋다.
+
+            const [isShow, setIsShow] = useState(false);
+
+            const EventButton = () => {
+                // 상황을 반전을 시켜줄수 있도록 해야하서 true 보단 !isShow 를 해야한다.
+                setIsShow(!isShow);
+            }
+
+            return(
+                <>
+                <button onClick={EventButton}>타이머 토글!!</button>
+                {isShow && <Timer/>}
+                </>
+            )
+        }
+
+
+
+
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>) // Timer 함수가 App에 자식으로 귀속되어 있으므로 App 으로 바꾼다.
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const { useState, useEffect } = React;
+
+        function Time() {
+            // 상태 변수들
+            const [inputValue, setInputValue] = useState("");  // input에 입력된 값
+            const [promptValue, setPromptValue] = useState("");  // prompt에서 입력된 값
+            const [isMatching, setIsMatching] = useState(false); // 값이 일치하는지 여부
+            const [time, setTime] = useState(0);  // 시간(ms)
+            
+            // useEffect로 타이머 설정
+            useEffect(() => {
+                // prompt 창을 1초마다 띄우고, 값을 저장
+                const intervalId = setInterval(() => {
+                    const promptInput = prompt('문자열을 입력하세요');
+                });
+
+                return () => clearInterval(intervalId);
+
+            }, []);
+
+            // input 값이 변경되었을 때 처리
+            const handleChange = (event) => {
+                const newValue = event.target.value;
+                setInputValue(newValue);
+
+                if (newValue === promptValue) {
+                    const currentTime = Date.now();
+                    setTime(currentTime);  // 시간(ms) 저장
+                    alert(`입력한 시간: ${currentTime} ms`);
+                }
+            };
+
+            return (
+                <div>
+                    <h1>{promptValue}</h1>
+                    <input 
+                        type="text" 
+                        value={inputValue} 
+                        onChange={handleChange} 
+                    />
+                    <p>{isMatching ? `일치!` : `일치하지 않음!`}</p>
+                </div>
+            );
+        }
+
+        function App() {
+            return <Time />;
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function Timer() {
+            const [work, setWork] = useState(false);  // 출근 여부
+            const [time, setTime] = useState(new Date().toLocaleTimeString());  // 현재 시간
+            const [intervalId, setIntervalId] = useState(null);  // intervalId 상태
+
+            // 출근 버튼 클릭 시
+            const startWork = () => {
+                setWork(true);
+            };
+
+            // 퇴근 버튼 클릭 시
+            const leaveWorkFn = () => {
+                setWork(false);
+                clearInterval(intervalId);  // interval 정지
+            };
+
+            // useEffect로 출근 중에만 시간을 업데이트
+            useEffect(() => {
+                if (work) {
+                    // 출근 시 interval 시작
+                    const id = setInterval(() => {
+                        setTime(new Date().toLocaleTimeString());  // 시간 업데이트
+                    }, 1000);
+                    setIntervalId(id);  // intervalId 저장
+                } else {
+                    // 퇴근 시 interval 정지
+                    if (intervalId) {
+                        clearInterval(intervalId);
+                    }
+                }
+
+                // clean up 함수
+                return () => {
+                    clearInterval(intervalId);  // 컴포넌트가 unmount되거나 work 상태 변경 시 interval 정리
+                };
+            }, [work]);  // work 상태가 변경될 때마다 useEffect가 실행됨
+
+            return (
+                <>
+                    <h1>{time}</h1>
+                    <button onClick={startWork} disabled={work}>출근</button>
+                    <button onClick={leaveWorkFn} disabled={!work}>퇴근</button>
+                </>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<Timer />);
+    </script>
+</body>
+</html>
