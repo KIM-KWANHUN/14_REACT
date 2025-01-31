@@ -27,6 +27,8 @@
                 }
 
                 // 랜더링 이후 시점에 동작
+                // number 나 toggle의 state 가 변경이 될때마다 print 함수가 재할당 되어서 로그가 계속 발생하고 있다.
+                // 하지만 매번 함수가 생성되어 반환되고, useEffect 에서는 해당 지역 변수에 변화가 있다고 인지를 하게 된다.
                 useEffect(() => {
                     console.log('printNumber 값 변화 인지됨...')
                 }, [PrintNumber]);
