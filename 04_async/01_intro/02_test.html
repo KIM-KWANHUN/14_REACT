@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+    <style>
+
+        /* 전체 컨테이너 */
+.bom-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* 제목 스타일 */
+.bom-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* 테이블 스타일 */
+.bom-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* 테이블 헤더 */
+.bom-table thead {
+  background: #007bff;
+  color: white;
+}
+
+.bom-table th {
+  padding: 12px;
+  text-align: center;
+  font-size: 16px;
+  border-bottom: 2px solid #ddd;
+}
+
+/* 테이블 바디 */
+.bom-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 입력 필드 스타일 */
+.bom-table input {
+  width: 80px;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.bom-table input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+}
+
+/* 행 hover 효과 */
+.bom-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+/* 총 원가 행 */
+.bom-total-label {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.bom-total-value {
+  font-weight: bold;
+  color: #d9534f;
+}
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const{useState} = React;
+
+
+        const BOMTable = () => {
+  const [items, setItems] = useState([
+    { id: 1, name: "맥아", price: 5000, quantity: 10 },
+    { id: 2, name: "홉", price: 2000, quantity: 5 },
+    { id: 3, name: "효모", price: 1000, quantity: 2 },
+    { id: 4, name: "몰트", price: 10000, quantity: 2 },
+    { id: 4, name: "몰트", price: 10000, quantity: 2 },
+    { id: 4, name: "몰트", price: 10000, quantity: 2 },
+    { id: 4, name: "몰트", price: 10000, quantity: 2 },
+    { id: 4, name: "몰트", price: 10000, quantity: 2 },
+    { id: 4, name: "몰트", price: 10000, quantity: 2 },
+    { id: 4, name: "몰트", price: 10000, quantity: 2 },
+    { id: 4, name: "몰트", price: 10000, quantity: 2 }
+  ]);
+
+  const handleInputChange = (id, field, value) => {
+    const updatedItems = items.map((item) =>
+      item.id === id ? { ...item, [field]: Number(value) || 0 } : item
+    );
+    setItems(updatedItems);
+  };
+
+  const calculateSubtotal = (price, quantity) => price * quantity;
+  const totalCost = items.reduce((sum, item) => sum + calculateSubtotal(item.price, item.quantity), 0);
+
+  return (
+    <div className="bom-container">
+      <h2 className="bom-title">🍺 BOM 원가 계산</h2>
+      <table className="bom-table">
+        <thead>
+          <tr>
+            <th>품목</th>
+            <th>단가 (₩)</th>
+            <th>수량</th>
+            <th>합계 (₩)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              <td>
+                <input
+                  type="number"
+                  value={item.price}
+                  onChange={(e) => handleInputChange(item.id, "price", e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  value={item.quantity}
+                  onChange={(e) => handleInputChange(item.id, "quantity", e.target.value)}
+                />
+              </td>
+              <td>{calculateSubtotal(item.price, item.quantity).toLocaleString()} 원</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan="3" className="bom-total-label">총 원가</td>
+            <td className="bom-total-value">{totalCost.toLocaleString()} 원</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<BOMTable/>)
+
+
+    </script>
+</body>
+</html>
