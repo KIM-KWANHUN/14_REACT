@@ -15,81 +15,47 @@
 
     <script type="text/babel">
 
-          /*
-                1. 상태관리 = input 검색어, image
-                2. 발생하는 이벤트 = input onChange, 검색 onClick
-                3. 컴포넌트 함수 = App, searchBox, imageBox
-                4. 시점 = 검색 버튼을 누를 시 이미지 경로 set
-            */
-
         const {useState} = React;
 
         function App() {
 
-        const[imgUrl, setImgUrl] = useState('');
-
+            const[imageUrl, setImageUrl] = useState('');
 
             return(
                 <>
-                <SearchBox setImgUrl={setImgUrl}/>
+                <Input setImageUrl={setImageUrl}/>
                 <br/>
-                <ImageBox imgUrl={imgUrl}/>
+                <Image imageUrl={imageUrl}/>
                 </>
             );
         }
 
-        // 전달받은 props 구조분해 할당
-        function SearchBox({setImgUrl}) {
+        function Input({setImageUrl}) {
 
-            // input 창
-            const [imageName, setImageName] = useState('');
-
-            const onChangeHandler = (e) => {
-                setImageName(e.target.value)
-            }
-
-            const onClickHandler =  async() => {
-               // 버튼 클릭 시 API 로부터 이모지 데이터를 조회한다.
-               // 1. fetch 방식
-            //    fetch('https://api.github.com/emojis')
-            //    .then(res => res.json())
-            //    .then(data => {
-            //     console.log('안에들어갈값', data);
-            //     setImgUrl(data[imageName]);
-            //     console.log(data[imageName]);
-            // })
-
-                // 2. axios 방식
-                // axios.get('https://api.github.com/emojis')
-                // .then(res => setImgUrl(res.data[imageName]))
-
-                // 3. async 방식
-                const promise = fetch('https://api.github.com/emojis');
-
-                const res = await promise;
-
-                const json = await res.json();
-
-                console.log(json);
-
-                setImgUrl(json[imageName]);
-
-            }
+            const[imageName, setImageName] = useState('');
 
             return(
                 <>
-                <input type="text" onChange={onChangeHandler}/>
-                <button onClick={onClickHandler}>검색</button>
+                <input type="text" onChange={(e) => {
+                    setImageName(e.target.value);
+                }}/>
+                <button onClick={() => {
+                    fetch('https://api.github.com/emojis')
+                    .then(res => res.json())
+                    .then(data => {
+                        setImageUrl(data[imageName])
+                    })
+                }}>입력</button>
                 </>
-            )
-        }
-
-        function ImageBox({imgUrl}) {
-
-
-            return !!imgUrl ? <img src={imgUrl}/> : <h1>텅</h1>
+            );
             
         }
+
+        function Image({imageUrl}) {
+
+            return !!imageUrl ? <img src={imageUrl}/> : <h1>텅</h1>
+
+}
 
     ReactDOM.createRoot(document.getElementById('root')).render(<App/>)
     </script>
