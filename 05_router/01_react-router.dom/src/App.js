@@ -13,7 +13,7 @@
   /menu/detail => <Detail/> 이렇게 url에 따라 컴포넌트를 매핑한다.
 */
 
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Main from './pages/Main'; // import 받을때 쓰는 구문
 import About from './pages/About'; // import 받을때 쓰는 구문
 import Menu from './pages/Menu'; // import 받을때 쓰는 구문
@@ -28,9 +28,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* <Route index element={<Main/>}/> 여기있는 부분이나 밑에 꺼를 쓰면된다. */}
-        <Route path='/' element={<Main/>}/>
-        <Route path='/menu' element={<Menu/>}/>
-        <Route path='/about' element={<About/>}/>
+        <Route path='/' element={<Main />} />
+        <Route path='/menu' element={<Menu />} />
+        <Route path='/about' element={<About />} />
       </Routes>
     </BrowserRouter>
   );
