@@ -1,0 +1,23 @@
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
+import Header from "../components/Header";
+import { Outlet } from 'react-router-dom';
+/*
+    아울렛(Outlet)이란?
+    react-router-dom 에서 제공하는 기능으로서
+    라우팅 된 컴포넌트를 렌더링 하는 컴포넌트 이다.
+    중첩 라우팅을 적용할 때 사용하게 되며
+    url 주소에 따라서 자식 컴포넌트를 렌더링 하는 역활을 한다.
+*/
+function Layout() {
+    return (
+        <>
+            <Header />
+            <Navbar />
+            <Outlet />
+            <Footer />
+        </>
+    );
+}
+
+export default Layout;
